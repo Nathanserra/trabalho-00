@@ -1,7 +1,6 @@
 package pacote;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 import exception.*;
 
 public class Predio {
@@ -17,48 +16,20 @@ public class Predio {
 		salas.add(new Sala(nome));
 	}
 	
-	void addSala(String nome, int capacidade) {
-		salas.add(new Sala(nome,capacidade));
-	}
-	
 	void addSala(String nome, int capacidade, String tipo_aula) {
-		salas.add(new Sala(nome, capacidade, tipo_aula));
+		salas.add(new Sala(nome,capacidade, tipo_aula));
+	}
+	
+	void addSala(String nome, int capacidade, String tipo_aula, Predio predio) {
+		salas.add(new Sala(nome, capacidade, tipo_aula, this));
 		
 	}
 	
-	void cadastrarSala() {
-		boolean dados_completos = false;
-		String nome = ""; 
-		String tipo_aula = "";
-		int capacidade = 0;
-		
-		while(dados_completos == false) {
-			try {
-				Scanner input = new Scanner(System.in);
-				System.out.println("Para cadastrar uma nova sala informe:");
-				
-				System.out.println("1 - O nome:");
-				nome = input.nextLine();
-				
-				System.out.println("2 - A capacidade:");
-				capacidade = input.nextInt();
-				input.nextLine();
-				System.out.println("3 - O tipo de aula:");
-				tipo_aula = input.nextLine();
-				
-				if (tipo_aula.length() == 0) {
-					throw new TipoDeAulaNaoAtribuidoException();
-				} else {
-					dados_completos = true;
-					break;
-				}
-				
-			} catch (TipoDeAulaNaoAtribuidoException e) {
-				System.out.println(e.getInfo());
-			}
-		}
-		if(dados_completos) {
-			this.addSala(nome, capacidade, tipo_aula);
+	void cadastrarSala(String nome, String tipo_aula, int capacidade, Predio predio) throws TipoDeAulaNaoAtribuidoException {
+		if (tipo_aula == null) {
+			throw new TipoDeAulaNaoAtribuidoException();
+		} else {
+			predio.addSala(nome, capacidade, tipo_aula, predio);
 			System.out.println("Sala cadastrada com sucesso!"); 
 		}
 	}
@@ -88,9 +59,15 @@ public class Predio {
 	
 	void infPredio() {
 		for(int i = 0; i<salas.size(); i++) {
-			System.out.println("			Salas["+ i +"]: " + salas.get(i).nome);
-			
+			System.out.println("			Salas["+ i +"]: " + salas.get(i).nome + " | Suporta " + salas.get(i).capacidade + " alunos | Tipo de Aula:" + salas.get(i).getTipo_aula());
+			salas.get(i).infSala();
 		}
 	}
+
+    public String getNome() {
+        return nome;
+    }
+
+    
 	
 }

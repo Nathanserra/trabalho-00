@@ -23,5 +23,4 @@ public class Aluno extends Matriculado {
 		this.curso = curso;
 	}
 
-
 }

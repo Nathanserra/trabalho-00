@@ -27,5 +27,6 @@ public class Professor extends Matriculado {
 		this.departamento = departamento;
 	}
 
+
 	
 }

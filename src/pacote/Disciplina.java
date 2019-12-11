@@ -1,81 +1,41 @@
 package pacote;
+import exception.ProfessorNaoAtribuidoException;
+import exception.DisciplinaNaoInformadaException;
 import java.util.ArrayList;
-import java.util.Scanner;
-import exception.*;
 
 public class Disciplina {
 	String nome;
+	Campus campus;
 	int credito;
+	String tipo_aula; 
 	ArrayList<Turma> turmas = new ArrayList<Turma>();
+        Matriculado prof;
+        Disciplina disciplina;
 	
-	public Disciplina(String nome,int credito) {
+        
+	Disciplina(String nome,int credito, String tipo_aula) {
 		this.nome = nome;
 		this.credito = credito;
+		this.tipo_aula = tipo_aula;
 	}
 
-	void addTurma(String nome) {
-		turmas.add(new Turma(nome));
+	void addTurma(String nome, int qtdAlunos, int dia, int hora) {
+		turmas.add(new Turma(nome, this, qtdAlunos, dia, hora));
 	}
 	
-	void addTurma(String nome, int qtdAlunos, int horario, int dia, String professor, String disciplina) {
+	void addTurma(String nome, int qtdAlunos, int dia, int hora, int dia2, int hora2, int dia3, int hora3) {
+		turmas.add(new Turma(nome, this, qtdAlunos, dia, hora, dia2, hora2, dia3, hora3));
+	}
+	
+	void addTurma(String nome, int qtdAlunos, int dia, int hora, int dia2, int hora2) {
+		turmas.add(new Turma(nome, this, qtdAlunos, dia, hora, dia2, hora2));
+	}
+        
+        void addTurma(String nome, int qtdAlunos, int horario, int dia, Matriculado professor, Disciplina disciplina) {
 		turmas.add(new Turma(nome, qtdAlunos, horario, dia, professor, disciplina));
 	}
 	
-	void cadastrarTurma() {
-		boolean dados_completos = false;
-		String nome = "";
-		int qtdAlunos = 0;
-		int horario = 0;
-		int dia = 0;
-		String professor = "";
-		String disciplina = "";
-		
-		while(dados_completos == false) {
-			try {
-				Scanner input = new Scanner(System.in);
-				System.out.println("Para cadastrar uma nova turma, informe:");
-				
-				System.out.println("1 - O nome:");
-				nome = input.next();
-				
-				System.out.println("2 - A quantidade de alunos:");
-				qtdAlunos = input.nextInt();
-				
-				System.out.println("3 - O horario:");
-				horario = input.nextInt();
-				
-				System.out.println("4 - O dia:");
-				dia = input.nextInt();
-				input.nextLine();
-				
-				System.out.println("5 - O professor:");
-				professor = input.nextLine();
-				
-				System.out.println("6 - A disciplina:");
-				disciplina = input.nextLine();
-				
-				if (professor.length() == 0) {
-					throw new ProfessorNaoAtribuidoException();
-				
-				} else if(disciplina.length() == 0) {
-					throw new DisciplinaNaoInformadaException();
-				
-				} else {
-					dados_completos = true;
-					break;
-				}
-			} catch (ProfessorNaoAtribuidoException e) {
-				System.out.println(e.getInfo());
-			
-			} catch (DisciplinaNaoInformadaException e) {
-				System.out.println(e.getInfo());
-			}
-		}
-		if(dados_completos) {
-			turmas.add(new Turma(nome, qtdAlunos, horario, dia, professor, disciplina));
-			System.out.println("Turma cadastrada com sucesso!");
-		}
-	}
+	
 	
 	void removeTurma(int id) {
 		turmas.remove(id);
@@ -87,13 +47,11 @@ public class Disciplina {
 		}
 	}
 	
-	void editTurma(int id, String newNome, int newQtdAlunos, int newHorario, int newDia) {
+	/*void editTurma(int id, String newNome, int newQtdAlunos) {
 		Turma t = turmas.get(id);
 		t.setNome(newNome);
 		t.setQtdAlunos(newQtdAlunos);
-		t.setHorario(newHorario);
-		t.setDia(newDia);
-	}
+	}*/
 	
 	int getIDTurmaStr(String nome) {
 		for(int i = 0; i<turmas.size();i++) {
@@ -114,9 +72,15 @@ public class Disciplina {
 	
 	void infDis() {
 		for(int i = 0; i<turmas.size(); i++) {
-			System.out.println("			Salas["+ i +"]: " + turmas.get(i).nome);
-			
+			System.out.println("			Turmas["+ i +"]: " + turmas.get(i).nome+" | qtdAlunos:"+turmas.get(i).qtdAlunos);
+			//turmas.get(i).infOcup();
 		}
 	}
+
+    public String getNome() {
+        return nome;
+    }
+
+    
 	
 }
